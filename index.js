@@ -3,8 +3,29 @@ $(document).ready(function(){
 	canvas.width = 1000;
 	canvas.height = 500;
     var ctx=canvas.getContext("2d");
-    function draw(a,l,x,y){
+    function draw(a,l,x,y,z){
         ctx.clearRect(0,0,canvas.width,canvas.height);
+        var imageObj = new Image();
+        imageObj.onload = function() {
+            ctx.drawImage(imageObj, a, l, 50,50);
+        };
+        switch(z){
+            case 1:
+            imageObj.src = 'img/1.png';
+            break;
+            case 2:
+            imageObj.src = 'img/2.png';
+            break;
+            case 3:
+            imageObj.src = 'img/3.png';
+            break;
+            case 4:
+            imageObj.src = 'img/4.png';
+            break;
+        }
+    }
+
+    function draw_without_clear(a,l,x,y){
         ctx.beginPath();
         ctx.fillStyle="skyblue";
         ctx.strokeStyle="gray";
@@ -13,8 +34,12 @@ $(document).ready(function(){
         ctx.stroke();
     }
 
-    function square(factor, x,y){
-    	draw(x,y,factor*5,factor*5)
+    function square_without_clear(factor, x,y){
+        draw_without_clear(x,y,factor*5,factor*5)
+    }
+
+    function square(factor, x,y,direction){
+    	draw(x,y,factor*5,factor*5,direction)
     }
 
         var i = 10;
@@ -23,8 +48,8 @@ $(document).ready(function(){
         square(10,i,j);
     function shoot(positionx, positiony, direction){ 	
         second = 10;
-        var f = positiony;
-        var g = positionx
+        var f = positiony + 25;
+        var g = positionx + 25;
         for (var k = 2; k <= 100; k++) {
         	setTimeout(function(){       
         		$('h1').html(f);
@@ -55,10 +80,8 @@ $(document).ready(function(){
                 if (f >= canvas.height - 50) {
                     f = canvas.height - 50;
                 };
-        		
-        		square(10,g,f);
-                i = g;
-                j = f;
+        		square(10,i,j,z);
+        		square_without_clear(2,g,f);
         	}, second*k);
         };
     }
@@ -113,7 +136,7 @@ $(document).ready(function(){
             j = canvas.height - 50;
           };
             $('h1').html(z);
-            square(10,i,j);
+            square(10,i,j,z);
         });
 
 });
